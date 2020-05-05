@@ -1,24 +1,31 @@
-#heart-rate.py
-#prototype heart-rate tracker for fitness watch
-#By: Tony Huang
-#Created 5/5/2020
-#Last modified 5/5/2020
-#version 0.2
+# heart-rate.py
+# prototype heart-rate tracker for fitness watch
+# By: Tony Huang
+# Created 5/5/2020
+# Last modified 5/5/2020
+# version 0.2
 
 
 def int_input(message):
     """Gets integer input and checks it for validity before returning it"""
-    #This loop will repeat untill return() is completed sucsessfully and exits out of the function
+    #  This loop will repeat untill return() is completed sucsessfully and exits out of the function
     while True:
         try:
-            return(int(input(message)))  #Prompt displayed by input() will be the paramater of the function
+            return(int(input(message)))  # Prompt displayed by input() will be the paramater of the function
 
         except:
             print("invalid response please try again")
 
 
-def heart_rates():
-    """Gets input on users heart rates and calculate resting rate"""
+def resting_rate():
+    """Gets input on users heart rates and calculate reserve rate"""
+
+    resting_rate = int_input("What is your resting heart rate in bpm?: ")
+    max_rate = int_input("What is your maximum heart rate in bpm?: ")
+
+    #Returns heart rate range between resting and maximum
+    return(max_rate - resting_rate)
+
 
 
 def intensity():
@@ -36,4 +43,3 @@ def output():
 def main():
     """Main sequence"""
 
-int_input("test: ")
