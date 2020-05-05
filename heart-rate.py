@@ -3,7 +3,7 @@
 # By: Tony Huang
 # Created 5/5/2020
 # Last modified 5/5/2020
-# version 0.2
+# version 0.3
 
 
 def int_input(message):
