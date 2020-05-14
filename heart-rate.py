@@ -3,7 +3,7 @@
 # By: Tony Huang
 # Created 5/5/2020
 # Last modified 5/5/2020
-# version 0.5
+# version 0.6
 
 
 def int_input(message):
@@ -24,26 +24,26 @@ def resting_max():
 
     reserve_rate = max_rate - resting_rate
 
-    #Returns heart rate range between resting and maximum
+    # Returns heart rate range between resting and maximum
     return(reserve_rate, resting_rate, max_rate)
 
 
 def minute_update(resting_rate, max_rate):
     "Returns the average heart rate of a period of exercise"
     timer = 1
-    heart_rates = [] #Stores all heart rates
+    heart_rates = []  # Stores all heart rates
 
 
     while True:    
         heart_rate = int_input("What is you heart rate at minute {}: ".format(timer))
-        if heart_rate <= max_rate and heart_rate >= resting_rate: #Checks if heartrate input is between resting and max
+        if heart_rate <= max_rate and heart_rate >= resting_rate:  # Checks if heartrate input is between resting and max
             heart_rates.append(heart_rate)
             timer += 1
         else:
             print("Invalid input: heart rate input should be between maximum and resting rate")
 
-        if input("Press y to exit the programme or anything else to continue") == "y":
-            return(sum(heart_rates)/len(heart_rates)) #Finds the average of the list by dividng the sum of values by number of values
+        if input("Press enter if done or anything else to add another value") == "":
+            return(sum(heart_rates)/len(heart_rates), timer)  # Finds the average of the list by dividng the sum of values by number of values
 
 
 def intensity(reserve_rate, resting_rate, max_rate, average_rate):
@@ -53,32 +53,56 @@ def intensity(reserve_rate, resting_rate, max_rate, average_rate):
     moderate_boundary = int(reserve_rate * 0.6)
     hard_boundary = int(reserve_rate * 0.9)
 
+
     # Dictionary establishes the difficulty levels and their range
-    intensities = {"very easy": [resting_rate,  easy_boundary],
+    intensities = {"very easy": [0,  easy_boundary],
         "easy": [easy_boundary, moderate_boundary],
         "moderate": [moderate_boundary, hard_boundary],
-        "hard": [hard_boundary, max_rate]}
+        "hard": [hard_boundary, reserve_rate]}
 
     # Increments through dictionary keys and checks if the average rate is inside the range
     for key in intensities:
-        if average_rate >= intensities.get(key)[0] and average_rate <= instensities.get(key)[1]:
+         if intensities.get(key)[0] <= (average_rate - resting_rate) <= intensities.get(key)[1]:
             return(key)
 
 
 def exercise_selector():
     """Allows user to select the exercise they are performing"""
 
+    exercises = {"1": "running", "2": "walking", "3": "resistance trainig", "4": "hiking", "5": "Wii Sports Resort™"}
 
-def output():
-    """Disaplays completed exercise, length of time, and intensity"""
+    while True:
+        print("Please select an exericse by pressing the corresponing number")
+        selected_exercise = input(exercises).strip() 
+        if selected_exercise in exercises:
+            return(exercises[selected_exercise])
+        else:
+            print("Invalid input please try again")
+
+def output(exercise):
+    "Prints out final output values"
+    reserve_rate, resting_rate, max_rate = resting_max()
+    average_rate, duration = minute_update(resting_rate, max_rate)
+
+    intensity_level = intensity(reserve_rate, resting_rate, max_rate, average_rate)
+
+    print("Resting BPM: {}, Max BPM: {}, Average BPM: {}, Exercise: {}, Difficulty: {}, Duration, {}".format(resting_rate, max_rate, average_rate, exercise, intensity_level, duration))
 
 
 def main():
-    """Main sequence"""
-    reserve_rate, resting_rate, max_rate = resting_max()
-    average_rate = minute_update(resting_rate, max_rate)
+    """Main sequence, displays menu and selection options """
+    exercise = "unspecified"
 
-    print(intensity(reserve_rate, resting_rate, max_rate, average_rate))
+    while True:
+        menu_option = input("1: Change exercise, currently '{}', \n2: Track workout, \n3: Exit \n: ".format(exercise)).strip()
+        if menu_option == "1":
+            exercise = exercise_selector()
+        elif menu_option == "2":
+            output(exercise)
+        elif menu_option == "3":
+            break
+        else:
+            print("Invalid input please try again")
 
 
 main()
