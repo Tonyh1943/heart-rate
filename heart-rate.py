@@ -2,8 +2,8 @@
 # prototype heart-rate tracker for fitness watch
 # By: Tony Huang
 # Created 5/5/2020
-# Last modified 5/5/2020
-# version 0.6
+# Last modified 15/5/2020
+# version 1.0
 
 
 def int_input(message):
@@ -18,14 +18,18 @@ def int_input(message):
 
 def resting_max():
     """Gets input on users heart rates and calculate reserve rate"""
+    
+    while True:
+        resting_rate = int_input("What is your resting heart rate in bpm?: ")
+        max_rate = int_input("What is your maximum heart rate in bpm?: ")
 
-    resting_rate = int_input("What is your resting heart rate in bpm?: ")
-    max_rate = int_input("What is your maximum heart rate in bpm?: ")
+        reserve_rate = max_rate - resting_rate
 
-    reserve_rate = max_rate - resting_rate
-
-    # Returns heart rate range between resting and maximum
-    return(reserve_rate, resting_rate, max_rate)
+        # Returns heart rate range between resting and maximum
+        if max_rate > resting_rate > 0:
+            return(reserve_rate, resting_rate, max_rate)
+        else:
+            print("Invalid response, max must be larger than resting")
 
 
 def minute_update(resting_rate, max_rate):
@@ -47,7 +51,7 @@ def minute_update(resting_rate, max_rate):
 
 
 def intensity(reserve_rate, resting_rate, max_rate, average_rate):
-    """Determins intensity of exercise based of heart_rate input"""
+    """Determins intensity of exercise based of heart_rate input and returns it"""
 
     easy_boundary = int(reserve_rate * 0.3)
     moderate_boundary = int(reserve_rate * 0.6)
@@ -74,13 +78,16 @@ def exercise_selector():
     while True:
         print("Please select an exericse by pressing the corresponing number")
         selected_exercise = input(exercises).strip() 
-        if selected_exercise in exercises:
+
+        if selected_exercise in exercises: # Checks if User input is in the dictionary
             return(exercises[selected_exercise])
         else:
             print("Invalid input please try again")
 
+
 def output(exercise):
-    "Prints out final output values"
+    """Prints out final output values"""
+
     reserve_rate, resting_rate, max_rate = resting_max()
     average_rate, duration = minute_update(resting_rate, max_rate)
 
